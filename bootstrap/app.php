@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Foundation\Application;
+use Illuminate\Foundation\Configuration\Exceptions;
+use Illuminate\Foundation\Configuration\Middleware;
+
+// ------------------------------
+// Configure Laravel application
+// ------------------------------
+return Application::configure(basePath: dirname(__DIR__))
+    ->withRouting(
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
+        health: '/up',
+    )
+    ->withMiddleware(function (Middleware $middleware) {
+        // Pass an array: 'alias_name' => MiddlewareClass
+        $middleware->alias([
+            'staff' => \App\Http\Middleware\EnsureStaff::class,
+            // Add more aliases here if needed:
+            // 'admin' => \App\Http\Middleware\EnsureAdmin::class,
+        ]);
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
+        // Custom exception handling
+    })
+    ->create();
